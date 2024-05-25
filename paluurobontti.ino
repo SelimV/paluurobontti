@@ -27,7 +27,6 @@ void setup()
     {
       udp.onPacket([](AsyncUDPPacket packet) {
         String myString = (const char*)packet.data();
-        Serial.println(myString);
         char delimiter = '/';
         int delIndex = myString.indexOf(delimiter);
         speed = myString.substring(0, delIndex).toFloat();
@@ -39,11 +38,13 @@ void setup()
 
 void loop()
 {
-    digitalWrite(LED_BUILTIN, HIGH);
+  Serial.println(speed);
+  Serial.println(turn);
+  digitalWrite(LED_BUILTIN, HIGH);
 
-    delay(500);
+  delay(100);
 
-    digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(LED_BUILTIN, LOW);
 
-    delay(1000);
+  delay(100);
 }
