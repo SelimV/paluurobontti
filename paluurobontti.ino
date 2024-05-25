@@ -3,8 +3,12 @@
 #include "AsyncUDP.h"
 AsyncUDP udp;
 
+float speed = 0;
+float turn = 0;
+
 void setup()
 {
+    pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(115200);
     WiFi.begin(ssid, password);
 
@@ -18,6 +22,7 @@ void setup()
     Serial.println("WiFi connected.");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+    Serial.println("Starting UDP listener");
     if (udp.listen(1234))
     {
         udp.onPacket([](AsyncUDPPacket packet)
@@ -25,11 +30,11 @@ void setup()
         String myString = (const char*)packet.data();
         Serial.println(myString); });
     }
+    Serial.println("setup complete");
 }
 
 void loop()
 {
-
     digitalWrite(LED_BUILTIN, HIGH);
 
     delay(500);
