@@ -21,6 +21,7 @@ document.addEventListener("keyup", function (event) {
 function main_loop() {
     if (space_down) {
         console.log("Space")
+        fetch("https://192.168.80.172/space").then(console.log)
     }
 }
 
