@@ -25,10 +25,15 @@ void setup()
     Serial.println("Starting UDP listener");
     if (udp.listen(1234))
     {
-        udp.onPacket([](AsyncUDPPacket packet)
-                     {
+      udp.onPacket([](AsyncUDPPacket packet) {
         String myString = (const char*)packet.data();
-        Serial.println(myString); });
+        Serial.println(myString);
+        for (int i = 0; i < myString.length();i++){
+          if (i%2==0){
+            Serial.println(myString[i]);
+          }
+        }
+      });
     }
     Serial.println("setup complete");
 }
