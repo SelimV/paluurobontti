@@ -1,22 +1,24 @@
 #include "WiFi.h"
 #include "wifi_credentials.h"
 
+WiFiServer server(80);
+
 void setup()
 {
-    pinMode(LED_BUILTIN, OUTPUT);
-    WiFi.begin(ssid, password);
     Serial.begin(115200);
+    WiFi.begin(ssid, password);
+
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
         Serial.println("Connecting to WiFi..");
     }
     Serial.println("Connected to the WiFi network");
-    // Print local IP address and start web server
     Serial.println("");
     Serial.println("WiFi connected.");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+    server.begin();
 }
 
 void loop()
