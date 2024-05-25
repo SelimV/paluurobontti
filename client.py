@@ -41,7 +41,7 @@ def main(ip_arduino):
             i = 0
 
         socket_udp.sendto(
-            bytes(f"Spaces in a row {i}", "utf-8"), (ip_arduino, PORT_ARDUINO)
+            bytes(f"Spaces in a row {i}\0", "utf-8"), (ip_arduino, PORT_ARDUINO)
         )
         sleep(0.1)
 
