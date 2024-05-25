@@ -9,7 +9,14 @@ PORT_ARDUINO = 1234
 
 class State:
     running = True
-    space_down = False
+    space_pressed = False
+    shift_pressed = False
+    up_pressed = False
+    down_pressed = False
+    left_pressed = False
+    right_pressed = False
+    speed = 0
+    turn = 0
 
 
 def main(ip_arduino):
@@ -20,29 +27,60 @@ def main(ip_arduino):
             case Key.delete:
                 state.running = False
             case Key.space:
-                state.space_down = True
+                state.space_pressed = True
+            case Key.shift:
+                state.shift_pressed = True
+            case Key.up:
+                state.up_pressed = True
+            case Key.down:
+                state.down_pressed = True
+            case Key.left:
+                state.left_pressed = True
+            case Key.right:
+                state.right_pressed = True
 
     def key_lift(key):
         match key:
             case Key.space:
-                state.space_down = False
+                state.space_pressed = False
+            case Key.shift:
+                state.shift_pressed = False
+            case Key.up:
+                state.up_pressed = False
+            case Key.down:
+                state.down_pressed = False
+            case Key.left:
+                state.left_pressed = False
+            case Key.right:
+                state.right_pressed = False
 
     listener = Listener(on_press=key_press, on_release=key_lift)
     listener.start()
 
     socket_udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    i = 0
     while state.running:
-        if state.space_down:
-            i += 1
-            print(i)
-        else:
-            i = 0
 
-        socket_udp.sendto(
-            bytes(f"Spaces in a row {i}\0", "utf-8"), (ip_arduino, PORT_ARDUINO)
-        )
+        if state.up_pressed:
+            state.speed = 0.5
+        if state.down_pressed:
+            state.speed = -0.5
+        if state.up_pressed == state.down_pressed:
+            state.speed = 0
+        if state.right_pressed:
+            state.turn = 0.5
+        if state.left_pressed:
+            state.turn = -0.5
+        if state.right_pressed == state.left_pressed:
+            state.turn = 0
+        if state.shift_pressed:
+            state.speed *= 2
+        if state.space_pressed:
+            state.turn *= 2
+
+        command = f"{state.speed}/{state.turn}"
+        print(command)
+        socket_udp.sendto(bytes(command, "utf-8"), (ip_arduino, PORT_ARDUINO))
         sleep(0.1)
 
 
