@@ -1,5 +1,8 @@
 #include "WiFi.h"
 #include "wifi_credentials.h"
+#include "AsyncUDP.h"
+AsyncUDP udp;
+
 
 WiFiServer server(80);
 
@@ -19,6 +22,12 @@ void setup()
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
     server.begin();
+    if (udp.listen(1234)){
+      udp.onPacket([](AsyncUDPPacket packet) {
+        String myString = (const char*)packet.data();
+        Serial.print(myString);
+      });
+    } 
 }
 
 void loop()
