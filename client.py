@@ -78,7 +78,7 @@ def main(ip_arduino):
         if state.space_pressed:
             state.turn *= 2
 
-        command = f"{state.speed}/{state.turn}"
+        command = f"{state.speed}/{state.turn}\0"
         print(command)
         socket_udp.sendto(bytes(command, "utf-8"), (ip_arduino, PORT_ARDUINO))
         sleep(0.1)
