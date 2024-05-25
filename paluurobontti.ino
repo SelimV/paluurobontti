@@ -28,11 +28,10 @@ void setup()
       udp.onPacket([](AsyncUDPPacket packet) {
         String myString = (const char*)packet.data();
         Serial.println(myString);
-        for (int i = 0; i < myString.length();i++){
-          if (i%2==0){
-            Serial.println(myString[i]);
-          }
-        }
+        char delimiter = '/';
+        int delIndex = myString.indexOf(delimiter);
+        speed = myString.substring(0, delIndex).toFloat();
+        turn = myString.substring(delIndex+1, myString.length()).toFloat();
       });
     }
     Serial.println("setup complete");
