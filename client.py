@@ -67,26 +67,26 @@ def main(ip_arduino):
     while state.running:
 
         if state.up_pressed:
-            state.speed = 0.5
+            state.speed = 0.4
         if state.down_pressed:
-            state.speed = -0.5
+            state.speed = -0.4
         if state.up_pressed == state.down_pressed:
             state.speed = 0
         if state.right_pressed:
-            state.turn = 0.5
+            state.turn = -0.4
         if state.left_pressed:
-            state.turn = -0.5
+            state.turn = 0.4
         if state.right_pressed == state.left_pressed:
             state.turn = 0
         if state.shift_l_pressed:
-            state.speed *= 2
+            state.speed *= 2.5
         if state.space_pressed:
-            state.turn *= 2
+            state.turn *= 2.5
 
         command = f"{state.speed}/{state.turn}/{state.horn}\0"
         print(command)
         socket_udp.sendto(bytes(command, "utf-8"), (ip_arduino, PORT_ARDUINO))
-        sleep(0.1)
+        sleep(0.03)
 
 
 if __name__ == "__main__":

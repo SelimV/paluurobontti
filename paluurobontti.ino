@@ -109,5 +109,5 @@ void loop()
   Serial.println(speed);
   Serial.println(turn);
 
-  delay(100);
+  delay(30);
 }
