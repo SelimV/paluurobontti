@@ -14,6 +14,8 @@ int motor2Pin1 = 15;
 int motor2Pin2 = 32;
 int enable2Pin = 14;
 
+int buzzerPin = 16;
+
 int resolution = 8;
 int freq = 30000;
 
@@ -53,6 +55,8 @@ void setup()
   pinMode(motor2Pin2, OUTPUT);
   pinMode(enable2Pin, OUTPUT);
 
+  pinMode(buzzerPin, OUTPUT);
+
   ledcSetup(0, freq, resolution);
   ledcSetup(1, freq, resolution);
   ledcAttachPin(enable1Pin, 0);
@@ -87,6 +91,15 @@ void loop()
   {
     digitalWrite(motor2Pin1, LOW);
     digitalWrite(motor2Pin2, HIGH);
+  }
+
+  if (speed > 0)
+  {
+    tone(buzzerPin, 1000);
+  }
+  else
+  {
+    noTone(buzzerPin);
   }
 
   Serial.println(speed);
