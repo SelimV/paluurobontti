@@ -10,13 +10,14 @@ PORT_ARDUINO = 1234
 class State:
     running = True
     space_pressed = False
-    shift_pressed = False
+    shift_l_pressed = False
     up_pressed = False
     down_pressed = False
     left_pressed = False
     right_pressed = False
     speed = 0
     turn = 0
+    horn = 0
 
 
 def main(ip_arduino):
@@ -28,8 +29,8 @@ def main(ip_arduino):
                 state.running = False
             case Key.space:
                 state.space_pressed = True
-            case Key.shift:
-                state.shift_pressed = True
+            case Key.shift_l:
+                state.shift_l_pressed = True
             case Key.up:
                 state.up_pressed = True
             case Key.down:
@@ -38,13 +39,15 @@ def main(ip_arduino):
                 state.left_pressed = True
             case Key.right:
                 state.right_pressed = True
+            case Key.shift_r:
+                state.horn = 1
 
     def key_lift(key):
         match key:
             case Key.space:
                 state.space_pressed = False
-            case Key.shift:
-                state.shift_pressed = False
+            case Key.shift_l:
+                state.shift_l_pressed = False
             case Key.up:
                 state.up_pressed = False
             case Key.down:
@@ -53,6 +56,8 @@ def main(ip_arduino):
                 state.left_pressed = False
             case Key.right:
                 state.right_pressed = False
+            case Key.shift_r:
+                state.horn = 0
 
     listener = Listener(on_press=key_press, on_release=key_lift)
     listener.start()
@@ -73,12 +78,12 @@ def main(ip_arduino):
             state.turn = -0.5
         if state.right_pressed == state.left_pressed:
             state.turn = 0
-        if state.shift_pressed:
+        if state.shift_l_pressed:
             state.speed *= 2
         if state.space_pressed:
             state.turn *= 2
 
-        command = f"{state.speed}/{state.turn}\0"
+        command = f"{state.speed}/{state.turn}/{state.horn}\0"
         print(command)
         socket_udp.sendto(bytes(command, "utf-8"), (ip_arduino, PORT_ARDUINO))
         sleep(0.1)
