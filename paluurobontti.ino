@@ -38,7 +38,8 @@ void setup()
   Serial.println("Starting UDP listener");
   if (udp.listen(1234))
   {
-    udp.onPacket([](AsyncUDPPacket packet) {
+    udp.onPacket([](AsyncUDPPacket packet)
+                 {
       String myString = (const char*)packet.data();
       char delimiter = '/';
       int startIndex = 0;
@@ -46,8 +47,7 @@ void setup()
       int delIndex2 = myString.indexOf(delimiter, delIndex1 + 1);
       speed = myString.substring(0, delIndex1).toFloat();
       turn = myString.substring(delIndex1 + 1, delIndex2).toFloat();
-      horn = myString.substring(delIndex2 + 1).toFloat();
-    });
+      horn = myString.substring(delIndex2 + 1).toFloat(); });
   }
   Serial.println("setup complete");
 
@@ -97,7 +97,7 @@ void loop()
     digitalWrite(motor2Pin2, HIGH);
   }
 
-  if (speed > 0)
+  if (horn > 0)
   {
     tone(buzzerPin, 1000);
   }
